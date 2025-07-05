@@ -1,0 +1,30 @@
+import type { Course } from '../types';
+
+  interface CourseListProps {
+    courses: Course[];
+  }
+
+export default function CourseList({ courses }: CourseListProps) {
+    return (
+        <div className="course-list"> 
+        {courses.map((course) => (
+          <div key={course.id} className="course-card">
+            
+            <div className="card-header">
+              <h3>{course.subject} {course.code}: {course.name}</h3>
+              <span className={course.status === 'Open' ? 'status-open' : 'status-closed'}>
+                {course.status}
+              </span>
+            </div>
+
+            <div className="card-body">
+              <p><strong>Professor:</strong> {course.professor}</p>
+              <p><strong>Credits:</strong> {course.credits}</p>
+              <p><strong>Meets:</strong> {course.days.join('/')} from {course.startTime} - {course.endTime}</p>
+            </div>
+
+          </div>
+        ))}
+      </div>
+    )
+} 
