@@ -5,9 +5,12 @@ interface FilterBarProps {
     setLevelFilter: (value: string) => void;
     professorNameFilter: string;
     setProfessorNameFilter: (value: string) => void;
+    handleClearFilters: () => void;
+    statusFilter: string;
+    setStatusFilter: (value: string) => void;
   }
 
-export default function FilterBar({ subjectFilter, setSubjectFilter, levelFilter, setLevelFilter, professorNameFilter, setProfessorNameFilter }: FilterBarProps) {
+export default function FilterBar({ subjectFilter, setSubjectFilter, levelFilter, setLevelFilter, professorNameFilter, setProfessorNameFilter, handleClearFilters, statusFilter, setStatusFilter }: FilterBarProps) {
     return (
         <div>
         <input
@@ -33,6 +36,16 @@ export default function FilterBar({ subjectFilter, setSubjectFilter, levelFilter
             <option value="4">4000 Levels</option>
           </select>
 
+          <label>
+            <input
+            type = "checkbox"
+            checked = {statusFilter === 'Open'}
+            onChange = {(e) => {
+              setStatusFilter(e.target.checked ? 'Open' : '')
+            }}
+            /> 
+            Show Open Courses
+          </label>
           <input type="text"
           className="professorName" value={professorNameFilter}
           placeholder="Search by professor name"
@@ -40,6 +53,7 @@ export default function FilterBar({ subjectFilter, setSubjectFilter, levelFilter
             setProfessorNameFilter(e.target.value)
           } }
           ></input>
+          <button className="clearFilters" onClick={handleClearFilters}>Clear Filters</button>
       </div>
 
     )
