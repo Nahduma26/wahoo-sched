@@ -2,9 +2,10 @@ import type { Course } from '../types';
 
   interface CourseListProps {
     courses: Course[];
+    handleAddToSchedule: (course: Course) => void;
   }
 
-export default function CourseList({ courses }: CourseListProps) {
+export default function CourseList({ courses, handleAddToSchedule }: CourseListProps) {
     return (
         <div className="course-list"> 
         {courses.map((course) => (
@@ -23,6 +24,11 @@ export default function CourseList({ courses }: CourseListProps) {
               <p><strong>Meets:</strong> {course.days.join('/')} from {course.startTime} - {course.endTime}</p>
             </div>
 
+            <div className="card-footer">
+              <button className="add-button" onClick={() => handleAddToSchedule(course)}>
+                Add to Schedule
+              </button>
+            </div>
           </div>
         ))}
       </div>
