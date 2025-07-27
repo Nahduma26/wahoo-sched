@@ -1,3 +1,4 @@
+import type { Course } from '../types';
 interface FilterBarProps {
     subjectFilter: string;
     setSubjectFilter: (value: string) => void;
@@ -8,9 +9,11 @@ interface FilterBarProps {
     handleClearFilters: () => void;
     statusFilter: string;
     setStatusFilter: (value: string) => void;
+    showOnlyNonConflicting: boolean;
+    setShowOnlyNonConflicting: (value: boolean) => void;
   }
 
-export default function FilterBar({ subjectFilter, setSubjectFilter, levelFilter, setLevelFilter, professorNameFilter, setProfessorNameFilter, handleClearFilters, statusFilter, setStatusFilter }: FilterBarProps) {
+export default function FilterBar({ subjectFilter, setSubjectFilter, levelFilter, setLevelFilter, professorNameFilter, setProfessorNameFilter, handleClearFilters, statusFilter, setStatusFilter, showOnlyNonConflicting, setShowOnlyNonConflicting }: FilterBarProps) {
     return (
         <div>
         <input
@@ -53,6 +56,16 @@ export default function FilterBar({ subjectFilter, setSubjectFilter, levelFilter
             setProfessorNameFilter(e.target.value)
           } }
           ></input>
+          <label>
+            <input
+            type="checkbox"
+            checked={showOnlyNonConflicting}
+            onChange={(e) => {
+              setShowOnlyNonConflicting(e.target.checked)
+            }}
+            />
+            Show Only Non-Conflicting Courses
+          </label>
           <button className="clearFilters" onClick={handleClearFilters}>Clear Filters</button>
       </div>
 

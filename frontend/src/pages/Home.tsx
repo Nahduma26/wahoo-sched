@@ -3,6 +3,7 @@ import { getCourses} from "../services/courseService"
 import FilterBar from "../components/FilterBar"
 import CourseList from "../components/CourseList"
 import type { Course } from "../types"
+import { filterNonConflictingCourses } from "../utils/scheduleUtils"
 
 interface HomeProps {
     courseData: Course[];
@@ -12,12 +13,13 @@ interface HomeProps {
     handleAddToSchedule: (course: Course) => void;
 }
 
-function Home({ courseData, setCourseData, mySchedule, setMySchedule, handleAddToSchedule }: HomeProps) {
+function Home({ courseData, setCourseData, handleAddToSchedule, mySchedule }: HomeProps) {
   const [subjectFilter, setSubjectFilter] = useState<string>("")
   const [levelFilter, setLevelFilter] = useState<string>("")
   const [professorNameFilter, setProfessorNameFilter] = useState<string>("")
   const [statusFilter, setStatusFilter] = useState<string>("")
-  const filteredCourses = courseData.filter((course) => {
+  const [showOnlyNonConflicting, setShowOnlyNonConflicting] = useState(false);
+  var filteredCourses = courseData.filter((course) => {
     return (
       (subjectFilter === "" || course.subject.toLowerCase().includes(subjectFilter.toLowerCase()))
       && (levelFilter === "" || course.code.startsWith(levelFilter))
@@ -25,6 +27,9 @@ function Home({ courseData, setCourseData, mySchedule, setMySchedule, handleAddT
       && (statusFilter === "" || course.status === statusFilter)
     )
   })
+  if (showOnlyNonConflicting) {
+    filteredCourses = filterNonConflictingCourses(filteredCourses, mySchedule)
+  }
   function handleClearFilters() {
     setSubjectFilter("")
     setLevelFilter("")
@@ -52,6 +57,8 @@ function Home({ courseData, setCourseData, mySchedule, setMySchedule, handleAddT
         handleClearFilters={handleClearFilters}
         statusFilter={statusFilter}
         setStatusFilter={setStatusFilter}
+        showOnlyNonConflicting={showOnlyNonConflicting}
+        setShowOnlyNonConflicting={setShowOnlyNonConflicting}
       />
 
       <CourseList courses={filteredCourses} handleAddToSchedule={handleAddToSchedule} />
