@@ -88,7 +88,6 @@ courseList = [
         "professor": "Allan Megill", "credits": 3, "days": ["T", "Th"], "startTime": "11:00", "endTime": "12:15",
         "gen_eds": ["Historical Studies", "Humanities"], "status": "Open"
     },
-    # New additions start here
     {
         "id": 16, "name": "General Chemistry I", "subject": "CHEM", "code": "1410",
         "description": "Introduction to the principles of chemistry.", "professor": "James Demas", "credits": 3,
@@ -190,7 +189,8 @@ courseList = [
     {
         "id": 34, "name": "Child Development", "subject": "PSYC", "code": "2700",
         "description": "An introduction to the study of child development.", "professor": "Vikram Jaswal",
-        "credits": 3, "days": ["M", "W"], "startTime": "11:00", "endTime": "12:15", "gen_eds": ["Social Sciences"], "status": "Open"
+        "credits": 3, "days": ["M", "W"], "startTime": "11:00", "endTime": "12:15", "gen_eds": ["Social Sciences"],
+        "status": "Open"
     },
     {
         "id": 35, "name": "Linear Algebra", "subject": "MATH", "code": "3351",
@@ -281,6 +281,86 @@ courseList = [
         "id": 50, "name": "General Biology I", "subject": "BIOL", "code": "2100",
         "description": "An introduction to the principles of biology.", "professor": "Masashi Kawasaki",
         "credits": 3, "days": ["M", "W", "F"], "startTime": "09:00", "endTime": "09:50", "gen_eds": ["Natural Sciences"],
+        "status": "Open"
+    },
+    # New Conflicting Courses
+    {
+        "id": 51, "name": "Money and Banking", "subject": "ECON", "code": "3030",
+        "description": "A course on the principles of money and banking.", "professor": "Steven Stern", "credits": 3,
+        "days": ["T", "Th"], "startTime": "11:00", "endTime": "12:15", "gen_eds": ["Social Sciences"], "status": "Open"
+    },
+    {
+        "id": 52, "name": "Software Development I", "subject": "CS", "code": "2110",
+        "description": "An introduction to software development with a focus on object-oriented programming.",
+        "professor": "Mark Sherriff", "credits": 3, "days": ["M", "W", "F"], "startTime": "10:00", "endTime": "10:50",
+        "gen_eds": [], "status": "Open"
+    },
+    {
+        "id": 53, "name": "History of Architecture", "subject": "SARC", "code": "2500",
+        "description": "A survey of architectural history from ancient times to the present.",
+        "professor": "Lisa Reilly", "credits": 3, "days": ["M", "W"], "startTime": "15:30", "endTime": "16:45",
+        "gen_eds": ["Historical Studies"], "status": "Open"
+    },
+    {
+        "id": 54, "name": "Philosophy of Mind", "subject": "PHIL", "code": "2450",
+        "description": "An examination of the nature of the mind and consciousness.", "professor": "Walter Sinnott-Armstrong",
+        "credits": 3, "days": ["T", "Th"], "startTime": "12:30", "endTime": "13:45", "gen_eds": ["Humanities"], "status": "Waitlisted"
+    },
+    {
+        "id": 55, "name": "Spiritual But Not Religious", "subject": "RELG", "code": "2660",
+        "description": "An exploration of spirituality outside of organized religion.", "professor": "Heather Warren",
+        "credits": 3, "days": ["T", "Th"], "startTime": "12:30", "endTime": "13:45", "gen_eds": ["Humanities"], "status": "Open"
+    },
+    {
+        "id": 56, "name": "Fiction Writing", "subject": "ENWR", "code": "2520",
+        "description": "A workshop in the writing of fiction.", "professor": "Jeb Livingood", "credits": 3,
+        "days": ["M"], "startTime": "11:00", "endTime": "13:30", "gen_eds": ["Humanities"], "status": "Open"
+    },
+    {
+        "id": 57, "name": "Introduction to Geopolitics", "subject": "PLIR", "code": "3500",
+        "description": "Study of the influence of geographic factors on international politics.", "professor": "Gerard Toal",
+        "credits": 3, "days": ["M", "W"], "startTime": "14:00", "endTime": "15:15", "gen_eds": ["Social Sciences"], "status": "Open"
+    },
+    {
+        "id": 58, "name": "Introduction to Immunology", "subject": "BIOL", "code": "4050",
+        "description": "A course on the principles of immunology.", "professor": "Thomas Platts-Mills", "credits": 3,
+        "days": ["M", "W", "F"], "startTime": "09:00", "endTime": "09:50", "gen_eds": ["Natural Sciences"], "status": "Open"
+    },
+    {
+        "id": 59, "name": "Digital Systems Design", "subject": "ECE", "code": "2330",
+        "description": "An introduction to the design of digital systems.", "professor": "Mircea Stan", "credits": 4,
+        "days": ["T", "Th"], "startTime": "14:00", "endTime": "15:15", "gen_eds": [], "status": "Open"
+    },
+    {
+        "id": 60, "name": "Modern Art", "subject": "ARTH", "code": "2471",
+        "description": "A survey of modern art from the late 19th century to the present.",
+        "professor": "Matthew Affron", "credits": 3, "days": ["M", "W", "F"], "startTime": "13:00", "endTime": "13:50",
+        "gen_eds": ["Humanities"], "status": "Waitlisted"
+    },
+    {
+        "id": 61, "name": "Calculus III", "subject": "MATH", "code": "2310",
+        "description": "A course on multivariable calculus.", "professor": "Craig Huneke", "credits": 4,
+        "days": ["T", "Th"], "startTime": "09:30", "endTime": "10:45", "gen_eds": ["Quantitative Reasoning"], "status": "Open"
+    },
+    {
+        "id": 62, "name": "Introduction to Film", "subject": "MDST", "code": "2200",
+        "description": "An introduction to the study of film.", "professor": "William Little", "credits": 3,
+        "days": ["T", "Th"], "startTime": "15:30", "endTime": "16:45", "gen_eds": ["Humanities"], "status": "Open"
+    },
+    {
+        "id": 63, "name": "Public Speaking", "subject": "DRAM", "code": "2030",
+        "description": "A course on the principles and practice of public speaking.", "professor": "Kate Burke",
+        "credits": 3, "days": ["M", "W", "F"], "startTime": "10:00", "endTime": "10:50", "gen_eds": [], "status": "Closed"
+    },
+    {
+        "id": 64, "name": "Data Structures and Algorithms 2", "subject": "CS", "code": "3100",
+        "description": "A second course in data structures and algorithms.", "professor": "Nada Basit",
+        "credits": 3, "days": ["T", "Th"], "startTime": "14:00", "endTime": "15:15", "gen_eds": [], "status": "Open"
+    },
+    {
+        "id": 65, "name": "Climate Change", "subject": "EVSC", "code": "2500",
+        "description": "An introduction to the science of climate change.", "professor": "Scott Doney",
+        "credits": 3, "days": ["M", "W"], "startTime": "11:00", "endTime": "12:15", "gen_eds": ["Natural Sciences"],
         "status": "Open"
     }
 ]
