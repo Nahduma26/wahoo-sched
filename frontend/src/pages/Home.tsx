@@ -61,7 +61,7 @@ function Home({ courseData, setCourseData, handleAddToSchedule, mySchedule }: Ho
         setShowOnlyNonConflicting={setShowOnlyNonConflicting}
       />
 
-      <CourseList courses={filteredCourses} handleAddToSchedule={handleAddToSchedule} />
+      <CourseList courses={filteredCourses} handleAddToSchedule={handleAddToSchedule} mySchedule={mySchedule} />
 
     </div>
   )

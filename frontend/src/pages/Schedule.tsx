@@ -2,9 +2,10 @@ import type { Course } from "../types"
 
 interface ScheduleProps {
     mySchedule: Course[];
+    handleRemoveFromSchedule: (course: Course) => void;
 }
 
-export default function Schedule({ mySchedule }: ScheduleProps) {
+export default function Schedule({ mySchedule, handleRemoveFromSchedule }: ScheduleProps) {
     return (
         <div className="schedule">
             <h2>My Schedule</h2>
@@ -15,6 +16,9 @@ export default function Schedule({ mySchedule }: ScheduleProps) {
                     {mySchedule.map((course) => (
                         <li key={course.id}>
                             {course.subject} {course.code}: {course.name} - {course.professor}
+                            <button onClick={() => handleRemoveFromSchedule(course)}>
+                                Remove
+                            </button>
                         </li>
                     ))}
                 </ul>
