@@ -1,3 +1,5 @@
+import { groupCoursesBySection } from "../utils/courseUtils";
+
 
 async function getCourses(): Promise<any> {
     const url = 'http://127.0.0.1:5000/api/courses'
@@ -10,9 +12,8 @@ async function getCourses(): Promise<any> {
 
     const json = await response.json()
     console.log(json)
-    return json
-    }
-    catch (error) {
+    return groupCoursesBySection(json)
+    } catch (error) {
         console.error('Error fetching courses:', error);
     }
 }

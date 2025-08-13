@@ -1,23 +1,23 @@
-import type { Course } from '../types';
+import type { CourseSection } from '../types';
 
-function hasTimeConflict(course1: Course, course2: Course): boolean {
-    const days1 = new Set(course1.days);
-    const days2 = new Set(course2.days);
+function hasTimeConflict(section1: CourseSection, section2: CourseSection): boolean {
+    const days1 = new Set(section1.days);
+    const days2 = new Set(section2.days);
     const commonDays = [...days1].filter(day => days2.has(day));
 
     if (commonDays.length === 0) return false;
 
-    const start1 = course1.startTime;
-    const end1 = course1.endTime;
-    const start2 = course2.startTime;
-    const end2 = course2.endTime;
+    const start1 = section1.startTime;
+    const end1 = section1.endTime;
+    const start2 = section2.startTime;
+    const end2 = section2.endTime;
     return (
         (start1 < end2 && end1 > start2) ||
         (start2 < end1 && end2 > start1)
     );
 }
 
-export function filterNonConflictingCourses(courses: Course[], schedule: Course[]): Course[] {
+export function filterNonConflictingCourses(courses: CourseSection[], schedule: CourseSection[]): CourseSection[] {
     return courses.filter(course => {
         return !schedule.some(scheduledCourse => hasTimeConflict(course, scheduledCourse));
     });
