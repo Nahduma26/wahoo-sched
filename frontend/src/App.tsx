@@ -3,32 +3,32 @@ import { Routes, Route, Link } from "react-router-dom"
 import { getCourses} from "./services/courseService"
 import FilterBar from "./components/FilterBar"
 import CourseList from "./components/CourseList"
-import type { Course } from "./types"
+import type { CourseGroup, CourseSection } from "./types"
 import Home from "./pages/Home"
 import Schedule from "./pages/Schedule"
 import ErrorPage from "./pages/ErrorPage"
 
 function App() {
-  const [courseData, setCourseData] = useState<Course[]>([])
-  const [mySchedule, setMySchedule] = useState<Course[]>(() => { 
+  const [courseData, setCourseData] = useState<CourseGroup[]>([])
+  const [mySchedule, setMySchedule] = useState<CourseSection[]>(() => { 
     const savedSchedule = localStorage.getItem("mySchedule")
     if (savedSchedule) {
       try {
-        return JSON.parse(savedSchedule) as Course[]
+        return JSON.parse(savedSchedule) as CourseSection[]
       } catch (error) {
         console.error("Error parsing schedule from localStorage:", error)
       }
     }
     return []
   })
-  function handleAddToSchedule(course: Course) {
+  function handleAddToSchedule(course: CourseSection) {
     if (!mySchedule.some((c) => c.id === course.id)) {
       setMySchedule([...mySchedule, course])
     } else {
       alert("This course is already in your schedule.")
     }
   }
-  function handleRemoveFromSchedule(course: Course) {
+  function handleRemoveFromSchedule(course: CourseSection) {
     setMySchedule(mySchedule.filter((c) => c.id !== course.id))
   }
   useEffect(() => {

@@ -1,40 +1,34 @@
-import type { Course } from '../types';
+import type { CourseGroup, CourseSection } from '../types';
 
 interface CourseListProps {
-  courses: Course[];
-  handleAddToSchedule: (course: Course) => void;
-  mySchedule?: Course[];
+  courses: CourseGroup[];
+  handleAddToSchedule: (course: CourseSection) => void;
+  mySchedule?: CourseSection[];
 }
 
 export default function CourseList({ courses, handleAddToSchedule, mySchedule }: CourseListProps) {
   return (
     <div className="course-list">
-      {courses.map((course) => {
-        if (!mySchedule?.some((c) => c.id === course.id)) {
-          return (
-            <div key={course.id} className="course-card">
-              <div className="card-header">
-                <h3>{course.subject} {course.code}: {course.name}</h3>
-                <span className={course.status === 'Open' ? 'status-open' : 'status-closed'}>
-                  {course.status}
-                </span>
-              </div>
-              <div className="card-body">
-                <p><strong>Professor:</strong> {course.professor}</p>
-                <p><strong>Credits:</strong> {course.credits}</p>
-                <p><strong>Meets:</strong> {course.days.join('/')} from {course.startTime} - {course.endTime}</p>
-              </div>
-              <div className="card-footer">
-                <button className="add-button" onClick={() => handleAddToSchedule(course)}>
-                  Add to Schedule
+      {courses.map((courseGroup) => (
+        <div key={`${courseGroup.subject}-${courseGroup.catalog_number}`} className="course-group">
+          <h2>{`${courseGroup.subject} ${courseGroup.catalog_number}: ${courseGroup.name}`}</h2>
+          <ul>
+            {courseGroup.sections.map((section) => (
+              <li key={section.id} className="course-section">
+                <div>
+                  <strong>Section:</strong> {section.section} | <strong>Professor:</strong> {section.professor} | <strong>Days:</strong> {section.days.join(', ')} | <strong>Time:</strong> {section.startTime} - {section.endTime} | <strong>Status:</strong> {section.status}
+                </div>
+                <button 
+                  onClick={() => handleAddToSchedule(section)}
+                  disabled={mySchedule?.some((c) => c.id === section.id)}
+                >
+                  {mySchedule?.some((c) => c.id === section.id) ? "In Schedule" : "Add to Schedule"}
                 </button>
-              </div>
-            </div>
-          );
-        } else {
-          return null;
-        }
-      })}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
     </div>
   );
 }

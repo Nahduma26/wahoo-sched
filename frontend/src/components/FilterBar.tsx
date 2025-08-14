@@ -1,4 +1,3 @@
-import type { Course } from '../types';
 interface FilterBarProps {
     subjectFilter: string;
     setSubjectFilter: (value: string) => void;

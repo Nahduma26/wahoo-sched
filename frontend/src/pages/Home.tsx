@@ -2,15 +2,15 @@ import { useState, useEffect } from "react"
 import { getCourses} from "../services/courseService"
 import FilterBar from "../components/FilterBar"
 import CourseList from "../components/CourseList"
-import type { Course } from "../types"
+import type { CourseGroup, CourseSection } from "../types"
 import { filterNonConflictingCourses } from "../utils/scheduleUtils"
 
 interface HomeProps {
-    courseData: Course[];
-    setCourseData: (courses: Course[]) => void;
-    mySchedule: Course[];
-    setMySchedule: (courses: Course[]) => void;
-    handleAddToSchedule: (course: Course) => void;
+    courseData: CourseGroup[];
+    setCourseData: (courses: CourseGroup[]) => void;
+    mySchedule: CourseSection[];
+    setMySchedule: (courses: CourseSection[]) => void;
+    handleAddToSchedule: (course: CourseSection) => void;
 }
 
 function Home({ courseData, setCourseData, handleAddToSchedule, mySchedule }: HomeProps) {
@@ -19,17 +19,24 @@ function Home({ courseData, setCourseData, handleAddToSchedule, mySchedule }: Ho
   const [professorNameFilter, setProfessorNameFilter] = useState<string>("")
   const [statusFilter, setStatusFilter] = useState<string>("")
   const [showOnlyNonConflicting, setShowOnlyNonConflicting] = useState(false);
-  var filteredCourses = courseData.filter((course) => {
-    return (
-      (subjectFilter === "" || course.subject.toLowerCase().includes(subjectFilter.toLowerCase()))
-      && (levelFilter === "" || course.code.startsWith(levelFilter))
-      && (professorNameFilter === "" || course.professor.toLowerCase().includes(professorNameFilter.toLowerCase()))
-      && (statusFilter === "" || course.status === statusFilter)
-    )
+  var filteredCourses = courseData.filter((group) => {
+    const groupMatches = (subjectFilter === "" || group.subject.toLowerCase().includes(subjectFilter.toLowerCase())) && (levelFilter === "" || group.catalog_number.startsWith(levelFilter));
+    return groupMatches && group.sections.length > 0;
+  }).map((group) => {
+    var filteredSections = group.sections.filter((section) => {
+      return (
+        (professorNameFilter === "" || section.professor.toLowerCase().includes(professorNameFilter.toLowerCase())) &&
+        (statusFilter === "" || section.status === statusFilter)
+      )
   })
-  if (showOnlyNonConflicting) {
-    filteredCourses = filterNonConflictingCourses(filteredCourses, mySchedule)
-  }
+    if (showOnlyNonConflicting && mySchedule.length > 0) {
+      filteredSections = filterNonConflictingCourses(filteredSections, mySchedule)
+    }
+    return {
+      ...group,
+      sections: filteredSections
+    }
+  })
   function handleClearFilters() {
     setSubjectFilter("")
     setLevelFilter("")

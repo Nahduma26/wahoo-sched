@@ -1,8 +1,8 @@
-import type { Course } from "../types"
+import type { CourseSection } from "../types"
 
 interface ScheduleProps {
-    mySchedule: Course[];
-    handleRemoveFromSchedule: (course: Course) => void;
+    mySchedule: CourseSection[];
+    handleRemoveFromSchedule: (course: CourseSection) => void;
 }
 
 export default function Schedule({ mySchedule, handleRemoveFromSchedule }: ScheduleProps) {
@@ -15,7 +15,7 @@ export default function Schedule({ mySchedule, handleRemoveFromSchedule }: Sched
                 <ul>
                     {mySchedule.map((course) => (
                         <li key={course.id}>
-                            {course.subject} {course.code}: {course.name} - {course.professor}
+                            {course.subject} {course.catalog_number}: {course.name} - {course.professor}
                             <button onClick={() => handleRemoveFromSchedule(course)}>
                                 Remove
                             </button>
