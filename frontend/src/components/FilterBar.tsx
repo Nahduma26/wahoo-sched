@@ -41,9 +41,9 @@ export default function FilterBar({ subjectFilter, setSubjectFilter, levelFilter
           <label>
             <input
             type = "checkbox"
-            checked = {statusFilter === 'Open'}
+            checked = {statusFilter === 'O'}
             onChange = {(e) => {
-              setStatusFilter(e.target.checked ? 'Open' : '')
+              setStatusFilter(e.target.checked ? 'O' : '')
             }}
             /> 
             Show Open Courses

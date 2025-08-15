@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { getCourses} from "../services/courseService"
 import FilterBar from "../components/FilterBar"
 import CourseList from "../components/CourseList"
 import type { CourseGroup, CourseSection } from "../types"
 import { filterNonConflictingCourses } from "../utils/scheduleUtils"
+import { sub } from "framer-motion/client"
 
 interface HomeProps {
     courseData: CourseGroup[];
@@ -19,24 +20,7 @@ function Home({ courseData, setCourseData, handleAddToSchedule, mySchedule }: Ho
   const [professorNameFilter, setProfessorNameFilter] = useState<string>("")
   const [statusFilter, setStatusFilter] = useState<string>("")
   const [showOnlyNonConflicting, setShowOnlyNonConflicting] = useState(false);
-  var filteredCourses = courseData.filter((group) => {
-    const groupMatches = (subjectFilter === "" || group.subject.toLowerCase().includes(subjectFilter.toLowerCase())) && (levelFilter === "" || group.catalog_number.startsWith(levelFilter));
-    return groupMatches && group.sections.length > 0;
-  }).map((group) => {
-    var filteredSections = group.sections.filter((section) => {
-      return (
-        (professorNameFilter === "" || section.professor.toLowerCase().includes(professorNameFilter.toLowerCase())) &&
-        (statusFilter === "" || section.status === statusFilter)
-      )
-  })
-    if (showOnlyNonConflicting && mySchedule.length > 0) {
-      filteredSections = filterNonConflictingCourses(filteredSections, mySchedule)
-    }
-    return {
-      ...group,
-      sections: filteredSections
-    }
-  })
+
   function handleClearFilters() {
     setSubjectFilter("")
     setLevelFilter("")
@@ -50,6 +34,22 @@ function Home({ courseData, setCourseData, handleAddToSchedule, mySchedule }: Ho
     }
     fetchCourses() 
   }, [])
+  useEffect(() => {
+    getCourses(subjectFilter, professorNameFilter, levelFilter, statusFilter).then((courses) => {
+      setCourseData(courses)
+    })
+  }, [subjectFilter, professorNameFilter, levelFilter, statusFilter])
+
+  const coursesToDisplay = useMemo(() => {
+    if (!showOnlyNonConflicting || mySchedule.length === 0) {
+      return courseData;
+    }
+    return courseData.map(course => ({
+      ...course,
+      sections: filterNonConflictingCourses(course.sections, mySchedule)
+    }))
+  }, [courseData, mySchedule, showOnlyNonConflicting])
+
   return (
     <div className="App">
 
@@ -68,7 +68,7 @@ function Home({ courseData, setCourseData, handleAddToSchedule, mySchedule }: Ho
         setShowOnlyNonConflicting={setShowOnlyNonConflicting}
       />
 
-      <CourseList courses={filteredCourses} handleAddToSchedule={handleAddToSchedule} mySchedule={mySchedule} />
+      <CourseList courses={coursesToDisplay} handleAddToSchedule={handleAddToSchedule} mySchedule={mySchedule} />
 
     </div>
   )
