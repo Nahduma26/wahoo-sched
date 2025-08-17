@@ -3,6 +3,7 @@ import supabase
 from supabase import create_client, Client
 import os
 import json
+from .courseUtils import group_courses_by_section
 
 course_page = Blueprint('course_page', __name__)
 
@@ -17,6 +18,15 @@ def get_courses():
     subject = request.args.get('subject')
     level = request.args.get('level')
     status = request.args.get('status')
+    page = request.args.get('page', default=0, type=int)
+    page_size = request.args.get('page_size', default=25, type=int)
+
+    if page < 0:
+        page = 0
+
+    if page_size < 1 or page_size > 100:
+        page_size = 25
+
     supabase: Client = create_client(url, key)
     query = supabase.table('Course').select('*')
     if professor:
@@ -27,21 +37,45 @@ def get_courses():
         query = query.ilike('catalog_number', f'{level}%')
     if status:
         query = query.eq('status', status)
-    current_page = 0
-    page_size = 1000
+    
     all_courses = []
 
-    while True:
-        start_index = current_page * page_size
-        end_index = (current_page + 1) * page_size - 1
-        data = query.range(start_index, end_index).execute()
-        if not data.data:
-            break
-        all_courses.extend(data.data)
-        if len(data.data) < page_size:
-            break
-        current_page += 1
+    db_page = 0
+    db_page_size = 1000
 
-    if not all_courses:
-        return jsonify([]), 200
-    return jsonify(all_courses), 200
+    while True:
+        response = query.range(db_page * db_page_size, (db_page + 1) * db_page_size - 1).execute()
+
+        if not response.data:
+            break
+        
+        all_courses.extend(response.data)
+
+        if len(response.data) < db_page_size:
+            break
+        
+        db_page += 1
+
+    if not response.data:
+        return jsonify({"data": [], "totalPages": 0})
+
+    grouped_courses = group_courses_by_section(all_courses)
+    total_items = len(grouped_courses)
+
+    start_index = page * page_size
+    end_index = start_index + page_size
+    
+    paginated_courses = grouped_courses[start_index:end_index]
+    
+    total_pages = 0
+    if total_items > 0:
+        total_pages = (total_items + page_size - 1) // page_size
+
+
+    return jsonify({
+        "courses": paginated_courses,
+        "totalPages": total_pages
+    })
+
+
+

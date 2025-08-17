@@ -5,6 +5,7 @@ import CourseList from "../components/CourseList"
 import type { CourseGroup, CourseSection } from "../types"
 import { filterNonConflictingCourses } from "../utils/scheduleUtils"
 import { sub } from "framer-motion/client"
+import Pagination from "../components/Pagination"
 
 interface HomeProps {
     courseData: CourseGroup[];
@@ -20,7 +21,9 @@ function Home({ courseData, setCourseData, handleAddToSchedule, mySchedule }: Ho
   const [professorNameFilter, setProfessorNameFilter] = useState<string>("")
   const [statusFilter, setStatusFilter] = useState<string>("")
   const [showOnlyNonConflicting, setShowOnlyNonConflicting] = useState(false);
-
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageSize, setPageSize] = useState(25);
+  const [totalPages, setTotalPages] = useState(0);
   function handleClearFilters() {
     setSubjectFilter("")
     setLevelFilter("")
@@ -29,16 +32,18 @@ function Home({ courseData, setCourseData, handleAddToSchedule, mySchedule }: Ho
   }
   useEffect(() => {
     async function fetchCourses() {
-      const courses = await getCourses()
+      const { courses, totalPages } = await getCourses()
       setCourseData(courses)
+      setTotalPages(totalPages)
     }
     fetchCourses() 
   }, [])
   useEffect(() => {
-    getCourses(subjectFilter, professorNameFilter, levelFilter, statusFilter).then((courses) => {
+    getCourses(subjectFilter, professorNameFilter, levelFilter, statusFilter, currentPage, pageSize).then(({ courses, totalPages }) => {
       setCourseData(courses)
+      setTotalPages(totalPages)
     })
-  }, [subjectFilter, professorNameFilter, levelFilter, statusFilter])
+  }, [subjectFilter, professorNameFilter, levelFilter, statusFilter, currentPage, pageSize])
 
   const coursesToDisplay = useMemo(() => {
     if (!showOnlyNonConflicting || mySchedule.length === 0) {
@@ -52,7 +57,7 @@ function Home({ courseData, setCourseData, handleAddToSchedule, mySchedule }: Ho
 
   return (
     <div className="App">
-
+      <Pagination currentPage={currentPage} totalPages={totalPages} setPage={setCurrentPage} setPageSize={setPageSize} pageSize={pageSize} />
       <h1>Course List</h1>
       <FilterBar
         subjectFilter={subjectFilter}

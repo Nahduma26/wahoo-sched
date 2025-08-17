@@ -33,7 +33,7 @@ function App() {
   }
   useEffect(() => {
     async function fetchCourses() {
-      const courses = await getCourses()
+      const courses = await getCourses().then((data) => data.courses)
       setCourseData(courses)
     }
     fetchCourses() 
