@@ -3,7 +3,9 @@ import supabase
 from supabase import create_client, Client
 import os
 import json
-from .courseUtils import group_courses_by_section
+from .course_utils import group_courses_by_section
+from flask_openai import OpenAI
+from .openai_utils import get_openai_client
 
 course_page = Blueprint('course_page', __name__)
 
@@ -78,4 +80,32 @@ def get_courses():
     })
 
 
+@course_page.route('/ai-search', methods=['GET', 'POST'])
+def ai_search():
+    """
+    AI search for courses based on a query.
+    """
+    query = request.json.get('query', '')
+    openai = get_openai_client()
+    completion = openai.client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {
+                "role": "system",
+                "content": "Based on the provided query, return a list of courses in JSON format with the following attributes: professor, status (either 'O', 'W', or 'C'), subject (based on the University of Virginia's course mnemonic), and level (e.g., '1', '2', etc.)."
+            },
+            {
+                "role": "user",
+                "content": query
+            }
+        ]
+     )
 
+    if not completion.choices or not completion.choices[0].message:
+        return jsonify({"error": "No response from AI"}), 500
+    response = completion.choices[0].message.content.strip()
+    try:
+        courses = json.loads(response)
+    except json.JSONDecodeError:
+        return jsonify({"error": "Invalid JSON response from AI"}), 400
+    return jsonify({"courses": courses})

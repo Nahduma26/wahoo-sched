@@ -9,7 +9,5 @@ load_dotenv()
 def create_app():
     app = Flask(__name__)
     CORS(app)
-    app.config['SECRET_KEY'] = os.getenv('OPENAI_API_KEY')
-    print(f"SECRET_KEY: {app.config['SECRET_KEY']}")
     app.register_blueprint(course_page, url_prefix='/api')
     return app
